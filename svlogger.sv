@@ -4,6 +4,9 @@
 `timescale 1 ns / 1 ps
 `default_nettype none
 
+`ifndef SVLOGGER
+`define SVLOGGER
+
 class svlogger;
 
     ////////////////////////////////////////////
@@ -125,3 +128,4 @@ class svlogger;
     endtask
 
 endclass
+`endif
