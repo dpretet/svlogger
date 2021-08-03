@@ -7,6 +7,18 @@
 `ifndef SVLOGGER
 `define SVLOGGER
 
+`define SVL_VERBOSE_OFF 0
+`define SVL_VERBOSE_DEBUG 1
+`define SVL_VERBOSE_INFO 2
+`define SVL_VERBOSE_WARNING 3
+`define SVL_VERBOSE_CRITICAL 4
+`define SVL_VERBOSE_ERROR 5
+
+`define SVL_ROUTE_TERM 1
+`define SVL_ROUTE_FILE 2
+`define SVL_ROUTE_ALL 3
+
+
 class svlogger;
 
     ////////////////////////////////////////////
@@ -57,18 +69,18 @@ class svlogger;
         this.name = _name;
         this.verbosity = _verbosity;
         this.route = _route;
-        if (route==2 || route==3) begin
+        if (route==`SVL_ROUTE_FILE || route==`SVL_ROUTE_ALL) begin
             f = $fopen({this.name, ".txt"},"w");
         end
     endfunction
 
     task debug(string message);
     begin
-        if (this.verbosity<2 && this.verbosity>0) begin
-        if (this.route==1 || this.route==3) begin
+        if (this.verbosity<`SVL_VERBOSE_INFO && this.verbosity>`SVL_VERBOSE_OFF) begin
+        if (this.route==`SVL_ROUTE_TERM || this.route==`SVL_ROUTE_ALL) begin
         $display("\033[1;37m%s: DEBUG: (@ %0t) %s \033[0m", this.name, $realtime, message);
         end
-        if (route==2 || route==3) begin
+        if (route==`SVL_ROUTE_FILE || route==`SVL_ROUTE_ALL) begin
         $fwrite(f, "\033[1;37m%s: DEBUG: (@ %0t) %s \033[0m\n", this.name, $realtime, message);
         end
         end
@@ -77,11 +89,11 @@ class svlogger;
 
     task info(string message);
     begin
-        if (this.verbosity<3 && this.verbosity>0) begin
-        if (this.route==1 || this.route==3) begin
+        if (this.verbosity<`SVL_VERBOSE_WARNING && this.verbosity>`SVL_VERBOSE_OFF) begin
+        if (this.route==`SVL_ROUTE_TERM || this.route==`SVL_ROUTE_ALL) begin
         $display("\033[1;34m%s: INFO: (@ %0t) %s \033[0m", this.name, $realtime, message);
         end
-        if (route==2 || route==3) begin
+        if (route==`SVL_ROUTE_FILE || route==`SVL_ROUTE_ALL) begin
             $fwrite(f, "\033[1;34m%s: INFO: (@ %0t) %s \033[0m\n", this.name, $realtime, message);
         end
         end
@@ -90,11 +102,11 @@ class svlogger;
 
     task warning(string message);
     begin
-        if (this.verbosity<4 && this.verbosity>0) begin
-        if (this.route==1 || this.route==3) begin
+        if (this.verbosity<`SVL_VERBOSE_CRITICAL && this.verbosity>`SVL_VERBOSE_OFF) begin
+        if (this.route==`SVL_ROUTE_TERM || this.route==`SVL_ROUTE_ALL) begin
         $display("\033[1;33m%s: WARNING: (@ %0t) %s \033[0m", this.name, $realtime, message);
         end
-        if (route==2 || route==3) begin
+        if (route==`SVL_ROUTE_FILE || route==`SVL_ROUTE_ALL) begin
             $fwrite(f, "\033[1;33m%s: WARNING: (@ %0t) %s \033[0m\n", this.name, $realtime, message);
         end
         end
@@ -103,11 +115,11 @@ class svlogger;
 
     task critical(string message);
     begin
-        if (this.verbosity<5 && this.verbosity>0) begin
-        if (this.route==1 || this.route==3) begin
+        if (this.verbosity<`SVL_VERBOSE_ERROR && this.verbosity>`SVL_VERBOSE_OFF) begin
+        if (this.route==`SVL_ROUTE_TERM || this.route==`SVL_ROUTE_ALL) begin
         $display("\033[1;35m%s: CRITICAL: (@ %0t) %s \033[0m", this.name, $realtime, message);
         end
-        if (route==2 || route==3) begin
+        if (route==`SVL_ROUTE_FILE || route==`SVL_ROUTE_ALL) begin
             $fwrite(f, "\033[1;35m%s: CRITICAL: (@ %0t) %s \033[0m\n", this.name, $realtime, message);
         end
         end
@@ -116,11 +128,11 @@ class svlogger;
 
     task error(string message);
     begin
-        if (this.verbosity<6 && this.verbosity>0) begin
-        if (this.route==1 || this.route==3) begin
+        if (this.verbosity<`SVL_VERBOSE_ERROR+1 && this.verbosity>`SVL_VERBOSE_OFF) begin
+        if (this.route==`SVL_ROUTE_TERM || this.route==`SVL_ROUTE_ALL) begin
         $display("\033[1;31m%s: ERROR: (@ %0t) %s \033[0m", this.name, $realtime, message);
         end
-        if (route==2 || route==3) begin
+        if (route==`SVL_ROUTE_FILE || route==`SVL_ROUTE_ALL) begin
             $fwrite(f, "\033[1;31m%s: ERROR: (@ %0t) %s \033[0m\n", this.name, $realtime, message);
         end
         end
