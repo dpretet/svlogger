@@ -8,8 +8,8 @@ module fsm_example
     #(
     parameter NAME = 0
     )(
-    input  logic aclk,
-    input  logic aresetn
+    input logic aclk,
+    input logic aresetn
     );
 
     typedef enum logic[3:0] {
@@ -27,7 +27,7 @@ module fsm_example
     svlogger mylog;
 
     initial begin
-        mylog = new("MyFSM", 1, 3);
+        mylog = new("MyFSM", `SVL_VERBOSE_DEBUG, `SVL_ROUTE_TERM);
     end
 
     always @ (posedge aclk or negedge aresetn) begin

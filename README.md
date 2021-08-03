@@ -67,13 +67,19 @@ Five functions are available to print a message by severity level:
 
 If verbosity is 0, no messages are logged. If equal to 1, everything is logged.
 If verbosity=2, only info, warning, critical and errors and so on until 5. All
-logs below the verbosity are discarded, all above are logged.
-- 0: No log
-- 1: Debug
-- 2: Info
-- 3: Warning
-- 4: Critical
-- 5: Error
+logs below the verbosity are discarded, all above are logged. For convenience,
+multiple defines can be used:
+- \`SVL_VERBOSE_OFF (0): No log
+- \`SVL_VERBOSE_DEBUG (1): Debug
+- \`SVL_VERBOSE_INFO (2): Info
+- \`SVL_VERBOSE_WARNING (3): Warning
+- \`SVL_VERBOSE_CRITICAL (4): Critical
+- \`SVL_VERBOSE_ERROR (5): Error
+
+Defines exist also to define the output routing:
+- \`SVL_ROUTE_TERM 1
+- \`SVL_ROUTE_FILE 2
+- \`SVL_ROUTE_ALL 3
 
 Messages are logged with embedded timeframe. To have a pretty-print of $realtime,
 you can setup the format with the next trick, for instance in your testbench:
