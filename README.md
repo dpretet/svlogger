@@ -26,7 +26,7 @@ First instantiate and setup it in a module:
     svlogger mylog;
 
     initial begin
-        mylog = new("MyFSM", 1, 3);
+        mylog = new("MyFSM", `SVL_VERBOSE_DEBUG, `SVL_ROUTE_TERM);
     end
 ```
 
