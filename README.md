@@ -18,6 +18,9 @@ and into the fileset:
 +incdir+SVLOGGER_PATH
 ```
 
+Please notice this project has been developed and tested with Icarus Verilog 11 and can't work
+with oldest version.
+
 ## How to
 
 First instantiate and setup it in a module:
