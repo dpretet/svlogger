@@ -140,3 +140,5 @@ class svlogger;
 
 endclass
 `endif
+
+`default_nettype wire
