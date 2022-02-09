@@ -1,8 +1,6 @@
 // distributed under the mit license
 // https://opensource.org/licenses/mit-license.php
 
-`default_nettype none
-
 `ifndef SVLOGGER
 `define SVLOGGER
 
