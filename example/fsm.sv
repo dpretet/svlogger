@@ -3,7 +3,7 @@
 
 `include "svlogger.sv"
 
-module fsm_example
+module fsm
 
     #(
     parameter NAME = 0
@@ -27,7 +27,7 @@ module fsm_example
     svlogger mylog;
 
     initial begin
-        mylog = new("MyFSM", `SVL_VERBOSE_DEBUG, `SVL_ROUTE_TERM);
+        mylog = new("MyFSM", `SVL_VERBOSE_DEBUG, `SVL_ROUTE_ALL);
     end
 
     always @ (posedge aclk or negedge aresetn) begin

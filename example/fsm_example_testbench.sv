@@ -12,7 +12,7 @@ module fsm_example_testbench();
     logic aclk;
     logic aresetn;
 
-    fsm_example
+    fsm
     #(
     NAME
     )

@@ -40,12 +40,9 @@ class svlogger;
     //   - 3: console and log file
     int  route;
 
-    // internal variable to build messages
-    string _msg;
-    string _time;
     // pointer to log file
     integer f;
-
+    //
     // color codes:
     // BLACK      "\033[1;30m"
     // RED        "\033[1;31m"
@@ -71,15 +68,24 @@ class svlogger;
         end
     endfunction
 
+    task log_msg(string message);
+    begin
+        if (this.route==`SVL_ROUTE_TERM || this.route==`SVL_ROUTE_ALL) begin
+            $display(message);
+        end
+        if (route==`SVL_ROUTE_FILE || route==`SVL_ROUTE_ALL) begin
+            $sformat(message, "%s\n", message);
+            $fwrite(f, message);
+        end
+    end
+    endtask
+
     task debug(string message);
     begin
         if (this.verbosity<`SVL_VERBOSE_INFO && this.verbosity>`SVL_VERBOSE_OFF) begin
-        if (this.route==`SVL_ROUTE_TERM || this.route==`SVL_ROUTE_ALL) begin
-        $display("\033[1;37m%s: DEBUG: (@ %0t) %s \033[0m", this.name, $realtime, message);
-        end
-        if (route==`SVL_ROUTE_FILE || route==`SVL_ROUTE_ALL) begin
-        $fwrite(f, "\033[1;37m%s: DEBUG: (@ %0t) %s \033[0m\n", this.name, $realtime, message);
-        end
+            string t_msg;
+            $sformat(t_msg, "\033[0;37m%s: DEBUG: (@ %0t) %s \033[0m", this.name, $realtime, message);
+            log_msg(t_msg);
         end
     end
     endtask
@@ -87,12 +93,9 @@ class svlogger;
     task info(string message);
     begin
         if (this.verbosity<`SVL_VERBOSE_WARNING && this.verbosity>`SVL_VERBOSE_OFF) begin
-        if (this.route==`SVL_ROUTE_TERM || this.route==`SVL_ROUTE_ALL) begin
-        $display("\033[1;34m%s: INFO: (@ %0t) %s \033[0m", this.name, $realtime, message);
-        end
-        if (route==`SVL_ROUTE_FILE || route==`SVL_ROUTE_ALL) begin
-            $fwrite(f, "\033[1;34m%s: INFO: (@ %0t) %s \033[0m\n", this.name, $realtime, message);
-        end
+            string t_msg;
+            $sformat(t_msg, "\033[0;34m%s: INFO: (@ %0t) %s \033[0m", this.name, $realtime, message);
+            log_msg(t_msg);
         end
     end
     endtask
@@ -100,12 +103,9 @@ class svlogger;
     task warning(string message);
     begin
         if (this.verbosity<`SVL_VERBOSE_CRITICAL && this.verbosity>`SVL_VERBOSE_OFF) begin
-        if (this.route==`SVL_ROUTE_TERM || this.route==`SVL_ROUTE_ALL) begin
-        $display("\033[1;33m%s: WARNING: (@ %0t) %s \033[0m", this.name, $realtime, message);
-        end
-        if (route==`SVL_ROUTE_FILE || route==`SVL_ROUTE_ALL) begin
-            $fwrite(f, "\033[1;33m%s: WARNING: (@ %0t) %s \033[0m\n", this.name, $realtime, message);
-        end
+            string t_msg;
+            $sformat(t_msg, "\033[1;33m%s: WARNING: (@ %0t) %s \033[0m", this.name, $realtime, message);
+            log_msg(t_msg);
         end
     end
     endtask
@@ -113,12 +113,9 @@ class svlogger;
     task critical(string message);
     begin
         if (this.verbosity<`SVL_VERBOSE_ERROR && this.verbosity>`SVL_VERBOSE_OFF) begin
-        if (this.route==`SVL_ROUTE_TERM || this.route==`SVL_ROUTE_ALL) begin
-        $display("\033[1;35m%s: CRITICAL: (@ %0t) %s \033[0m", this.name, $realtime, message);
-        end
-        if (route==`SVL_ROUTE_FILE || route==`SVL_ROUTE_ALL) begin
-            $fwrite(f, "\033[1;35m%s: CRITICAL: (@ %0t) %s \033[0m\n", this.name, $realtime, message);
-        end
+            string t_msg;
+            $sformat(t_msg, "\033[1;35m%s: CRITICAL: (@ %0t) %s \033[0m", this.name, $realtime, message);
+            log_msg(t_msg);
         end
     end
     endtask
@@ -126,12 +123,9 @@ class svlogger;
     task error(string message);
     begin
         if (this.verbosity<`SVL_VERBOSE_ERROR+1 && this.verbosity>`SVL_VERBOSE_OFF) begin
-        if (this.route==`SVL_ROUTE_TERM || this.route==`SVL_ROUTE_ALL) begin
-        $display("\033[1;31m%s: ERROR: (@ %0t) %s \033[0m", this.name, $realtime, message);
-        end
-        if (route==`SVL_ROUTE_FILE || route==`SVL_ROUTE_ALL) begin
-            $fwrite(f, "\033[1;31m%s: ERROR: (@ %0t) %s \033[0m\n", this.name, $realtime, message);
-        end
+            string t_msg;
+            $sformat(t_msg, "\033[1;31m%s: ERROR: (@ %0t) %s \033[0m", this.name, $realtime, message);
+            log_msg(t_msg);
         end
     end
     endtask
