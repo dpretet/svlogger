@@ -73,7 +73,7 @@ class svlogger;
         if (this.route==`SVL_ROUTE_TERM || this.route==`SVL_ROUTE_ALL) begin
             $display(message);
         end
-        if (route==`SVL_ROUTE_FILE || route==`SVL_ROUTE_ALL) begin
+        if (this.route==`SVL_ROUTE_FILE || this.route==`SVL_ROUTE_ALL) begin
             $sformat(message, "%s\n", message);
             $fwrite(f, message);
         end
