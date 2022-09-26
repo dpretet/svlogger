@@ -21,7 +21,7 @@ class svlogger;
     ////////////////////////////////////////////
     // Name of the module printed in the console
     // and/or the log file name
-    string  name;
+    string name;
 
     ///////////////////////////////////
     // Verbosity level of the instance:
@@ -31,18 +31,18 @@ class svlogger;
     //   - 3: warning/critical/error
     //   - 4: critical/error
     //   - 5: error
-    int     verbosity;
+    int verbosity;
 
     ///////////////////////////////////////////////////////
     // Define if log in the console, in a log file or both:
     //   - 1: console only
     //   - 2: log file only
     //   - 3: console and log file
-    int  route;
+    int route;
 
     // pointer to log file
     integer f;
-    //
+
     // color codes:
     // BLACK      "\033[1;30m"
     // RED        "\033[1;31m"
@@ -63,69 +63,85 @@ class svlogger;
         this.name = _name;
         this.verbosity = _verbosity;
         this.route = _route;
-        if (route==`SVL_ROUTE_FILE || route==`SVL_ROUTE_ALL) begin
-            f = $fopen({this.name, ".txt"},"w");
+        if (this.route==`SVL_ROUTE_FILE || this.route==`SVL_ROUTE_ALL) begin
+            this.f = $fopen({this.name, ".txt"},"w");
         end
     endfunction
 
-    task log_msg(string message);
+    // Internal function to log into console and/or log file
+    // Internal use only
+    task _log_text(string text);
     begin
+        string t_text;
         if (this.route==`SVL_ROUTE_TERM || this.route==`SVL_ROUTE_ALL) begin
-            $display(message);
+            $display(text);
         end
         if (this.route==`SVL_ROUTE_FILE || this.route==`SVL_ROUTE_ALL) begin
-            $sformat(message, "%s\n", message);
-            $fwrite(f, message);
+            $sformat(t_text, "%s\n", text);
+            $fwrite(this.f, t_text);
         end
     end
     endtask
 
-    task debug(string message);
+    // Just write a message without any formatting neither time printed
+    // Could be used for further explanation of a previous debug/info ...
+    task msg(string text);
+    begin
+        _log_text(text);
+    end
+    endtask
+
+    // Print a debug message, in white
+    task debug(string text);
     begin
         if (this.verbosity<`SVL_VERBOSE_INFO && this.verbosity>`SVL_VERBOSE_OFF) begin
-            string t_msg;
-            $sformat(t_msg, "\033[0;37m%s: DEBUG: (@ %0t) %s \033[0m", this.name, $realtime, message);
-            log_msg(t_msg);
+            string t_text;
+            $sformat(t_text, "\033[0;37m%s: DEBUG: (@ %0t) %s \033[0m", this.name, $realtime, text);
+            _log_text(t_text);
         end
     end
     endtask
 
-    task info(string message);
+    // Print an info message, in blue
+    task info(string text);
     begin
         if (this.verbosity<`SVL_VERBOSE_WARNING && this.verbosity>`SVL_VERBOSE_OFF) begin
-            string t_msg;
-            $sformat(t_msg, "\033[0;34m%s: INFO: (@ %0t) %s \033[0m", this.name, $realtime, message);
-            log_msg(t_msg);
+            string t_text;
+            $sformat(t_text, "\033[0;34m%s: INFO: (@ %0t) %s \033[0m", this.name, $realtime, text);
+            _log_text(t_text);
         end
     end
     endtask
 
-    task warning(string message);
+    // Print a warning message, in yellow
+    task warning(string text);
     begin
         if (this.verbosity<`SVL_VERBOSE_CRITICAL && this.verbosity>`SVL_VERBOSE_OFF) begin
-            string t_msg;
-            $sformat(t_msg, "\033[1;33m%s: WARNING: (@ %0t) %s \033[0m", this.name, $realtime, message);
-            log_msg(t_msg);
+            string t_text;
+            $sformat(t_text, "\033[1;33m%s: WARNING: (@ %0t) %s \033[0m", this.name, $realtime, text);
+            _log_text(t_text);
         end
     end
     endtask
 
-    task critical(string message);
+    // Print a critical message, in pink
+    task critical(string text);
     begin
         if (this.verbosity<`SVL_VERBOSE_ERROR && this.verbosity>`SVL_VERBOSE_OFF) begin
-            string t_msg;
-            $sformat(t_msg, "\033[1;35m%s: CRITICAL: (@ %0t) %s \033[0m", this.name, $realtime, message);
-            log_msg(t_msg);
+            string t_text;
+            $sformat(t_text, "\033[1;35m%s: CRITICAL: (@ %0t) %s \033[0m", this.name, $realtime, text);
+            _log_text(t_text);
         end
     end
     endtask
 
-    task error(string message);
+    // Print an error message, in red
+    task error(string text);
     begin
         if (this.verbosity<`SVL_VERBOSE_ERROR+1 && this.verbosity>`SVL_VERBOSE_OFF) begin
-            string t_msg;
-            $sformat(t_msg, "\033[1;31m%s: ERROR: (@ %0t) %s \033[0m", this.name, $realtime, message);
-            log_msg(t_msg);
+            string t_text;
+            $sformat(t_text, "\033[1;31m%s: ERROR: (@ %0t) %s \033[0m", this.name, $realtime, text);
+            _log_text(t_text);
         end
     end
     endtask
