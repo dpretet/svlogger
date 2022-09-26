@@ -1,3 +1,10 @@
+![CI](https://github.com/dpretet/svlogger/actions/workflows/ci.yaml/badge.svg?branch=main)
+[![GitHub license](https://img.shields.io/github/license/dpretet/svlogger)](https://github.com/dpretet/svlogger/blob/master/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/dpretet/svlogger)](https://github.com/dpretet/svlogger/issues)
+[![GitHub stars](https://img.shields.io/github/stars/dpretet/svlogger)](https://github.com/dpretet/svlogger/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/dpretet/svlogger)](https://github.com/dpretet/svlogger/network)
+[![Twitter](https://img.shields.io/twitter/url/https/github.com/dpretet/svlogger?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fdpretet%2Fsvlogger)
+
 # SVLogger
 
 A SystemVerilog logger to help designers to log events in a circuit during a
