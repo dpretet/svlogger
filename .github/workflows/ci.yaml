@@ -6,12 +6,21 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: brew install verilator
+      - run: verilator -V
       - run: verilator --lint-only svlogger.sv
 
-  Example:
+  Example-Icarus:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
       - run: brew install icarus-verilog
       - run: iverilog -V
-      - run: cd example && ./runme.sh
+      - run: cd example && ./runme.sh -s icarus
+
+  Example-Verilator:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: brew install verilator
+      - run: verilator -V
+      - run: cd example && ./runme.sh -s verilator

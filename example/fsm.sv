@@ -6,7 +6,7 @@
 module fsm
 
     #(
-    parameter NAME = 0
+    parameter NAME = "FSMExample"
     )(
     input logic aclk,
     input logic aresetn
@@ -55,7 +55,15 @@ module fsm
                 end
                 FOUR: begin
                     mylog.error("Moving in FOUR state");
-                    fsm <= IDLE;
+                    fsm <= FIVE;
+                end
+                FIVE: begin
+                    mylog.info("Moving in FIVE state");
+                    fsm <= SIX;
+                end
+                SIX: begin
+                    mylog.info("End of simulation");
+                    $finish();
                 end
             endcase
         end

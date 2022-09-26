@@ -25,8 +25,9 @@ and into the fileset:
 +incdir+SVLOGGER_PATH
 ```
 
-Please notice this project has been developed and tested with Icarus Verilog 11 and can't work
-with oldest version.
+Please notice this project has been developed and tested with Icarus Verilog 11 and Verilator 5.
+It can't work with oldest version of these software. SVlogger could probably work with other
+(commercial) simulators but it never has been tested oustide iverilog and verilator scope.
 
 ## How to
 

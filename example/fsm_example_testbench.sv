@@ -3,24 +3,29 @@
 
 `timescale 1 ns / 100 ps
 
-module fsm_example_testbench();
-
-    `SVUT_SETUP
-
-    parameter NAME = 0;
-
-    logic aclk;
-    logic aresetn;
+module fsm_example_testbench(
+    `ifdef VERILATOR
+        input wire aclk,
+        input wire aresetn
+    `endif
+);
 
     fsm
     #(
-    NAME
+        "fsm_example"
     )
     dut
     (
-    aclk,
-    aresetn
+        aclk,
+        aresetn
     );
+
+    `ifndef VERILATOR
+
+    `SVUT_SETUP
+
+    logic aclk;
+    logic aresetn;
 
     // To create a clock:
     initial aclk = 0;
@@ -83,5 +88,7 @@ module fsm_example_testbench();
     `UNIT_TEST_END
 
     `TEST_SUITE_END
+
+    `endif
 
 endmodule
