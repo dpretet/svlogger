@@ -1,0 +1,17 @@
+name: SVLogger
+on: [push]
+jobs:
+  Lint:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: brew install verilator
+      - run: verilator --lint-only svlogger.sv
+
+  Example:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: brew install icarus-verilog
+      - run: iverilog -V
+      - run: cd example && ./runme.sh
