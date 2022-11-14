@@ -25,9 +25,9 @@ and into the fileset:
 +incdir+SVLOGGER_PATH
 ```
 
-Please notice this project has been developed and tested with Icarus Verilog 11 and Verilator 5.
-It can't work with oldest version of these software. SVlogger could probably work with other
-(commercial) simulators but it never has been tested oustide iverilog and verilator scope.
+Please notice this project has been developed and tested with Icarus Verilog 11 and Verilator 5. It
+can't work with oldest versions. SVlogger could probably work with other (commercial) simulators but
+it never has been tested oustide iverilog and verilator scope.
 
 ## How to
 
@@ -69,28 +69,29 @@ The class is setup with three arguments:
 
 
 Five functions are available to print a message by severity level:
-- **debug**, printed in white
-- **info**, printed in blue
-- **warning**, printed in yellow
-- **critical**, printed in pink
-- **error**, printed in red
+- ⬜️ **debug**, printed in white
+- 🟦 **info**, printed in blue
+- 🟨 **warning**, printed in yellow
+- 🟪 **critical**, printed in pink
+- 🟥 **error**, printed in red
 
 
 If verbosity is 0, no messages are logged. If equal to 1, everything is logged.
 If verbosity=2, only info, warning, critical and errors and so on until 5. All
-logs below the verbosity are discarded, all above are logged. For convenience,
-multiple defines can be used:
-- \`SVL_VERBOSE_OFF (0): No log
-- \`SVL_VERBOSE_DEBUG (1): Debug
-- \`SVL_VERBOSE_INFO (2): Info
-- \`SVL_VERBOSE_WARNING (3): Warning
-- \`SVL_VERBOSE_CRITICAL (4): Critical
-- \`SVL_VERBOSE_ERROR (5): Error
+logs below the verbosity are discarded, all above are logged.
+
+For convenience, multiple defines can be used:
+- **\`SVL_VERBOSE_OFF** (0)
+- **\`SVL_VERBOSE_DEBUG** (1)
+- **\`SVL_VERBOSE_INFO`** (2)
+- **\`SVL_VERBOSE_WARNING** (3)
+- **\`SVL_VERBOSE_CRITICAL** (4)
+- **\`SVL_VERBOSE_ERROR** (5)
 
 Defines exist also to define the output routing:
-- \`SVL_ROUTE_TERM (1): only to terminal
-- \`SVL_ROUTE_FILE (2): only to log file
-- \`SVL_ROUTE_ALL (3): in both terminal and log file
+- **\`SVL_ROUTE_TERM** (1)
+- **\`SVL_ROUTE_FILE** (2)
+- **\`SVL_ROUTE_ALL** (3)
 
 Messages are logged with embedded timeframe. To have a pretty-print of $realtime,
 you can setup the format with the next trick, for instance in your testbench:
