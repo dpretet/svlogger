@@ -10,6 +10,11 @@ module fsm_example_testbench(
     `endif
 );
 
+    `ifndef VERILATOR
+    logic aclk;
+    logic aresetn;
+    `endif
+
     fsm
     #(
         "fsm_example"
@@ -23,9 +28,6 @@ module fsm_example_testbench(
     `ifndef VERILATOR
 
     `SVUT_SETUP
-
-    logic aclk;
-    logic aresetn;
 
     // To create a clock:
     initial aclk = 0;

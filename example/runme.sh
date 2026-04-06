@@ -63,9 +63,36 @@ usage: bash ./run.sh ...
 EOF
 }
 
+# Function to verify log merger output
+verify_log_merger() {
+    local sim_type=$1
+    local merged_file="merged_${sim_type}_logs.txt"
+
+    echo "Running Python log merger..."
+    python3 ../svlogger.py MyFSM.txt --output "$merged_file"
+
+    # Count log entries in merged file
+    local merged_count=$(grep -c "@" "$merged_file" 2>/dev/null || echo "0")
+
+    # Count log entries in input file
+    local input_count=$(grep -c "@" "MyFSM.txt" 2>/dev/null || echo "0")
+
+    # Verify counts match
+    echo "Verifying log merger output..."
+    if [[ $merged_count -eq $input_count ]]; then
+        echo "✅ Log merger: All $merged_count entries found in $merged_file"
+    else
+        echo "⚠️  Log merger: Expected $input_count entries, found $merged_count in $merged_file"
+    fi
+
+    echo "Logs merged into $merged_file"
+}
+
 compile() {
     if [ "$SIM" == "icarus" ]; then
         iverilog -g2012 -Wall -o icarus.out -f files.f  fsm_example_testbench.sv ; vvp icarus.out
+        verify_log_merger "icarus"
+
     else
         verilator -Wall --trace --Mdir build +1800-2017ext+sv \
             +1800-2005ext+v -Wno-STMTDLY -Wno-UNUSED -Wno-UNDRIVEN -Wno-PINCONNECTEMPTY \
@@ -75,6 +102,7 @@ compile() {
             fsm_example_testbench.sv sim_main.cpp
 
         ./build/Vfsm_example_testbench
+        verify_log_merger "verilator"
     fi
 }
 #------------------------------------------------------------------------------
