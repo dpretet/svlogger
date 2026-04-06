@@ -126,6 +126,65 @@ task:
 If using Verilator, the first file is suppressed and a new file is created; but with
 Icarus Verilog the first file is kept because the tool limitation to use `$system()`.
 
+## Log Merger Tool
+
+SVLogger includes a Python script to merge multiple log files from different simulation runs
+into a single chronological file. This is useful when you have logs from multiple modules or
+testbenches and want to see the complete simulation timeline.
+
+### Usage
+
+```bash
+# Merge specific log files
+python3 svlogger.py file1.txt file2.txt --output merged.log
+
+# Merge all .txt files in a directory
+python3 svlogger.py logs/*.txt --output merged.log
+
+# Scan a directory recursively for all log files
+python3 svlogger.py logs/ --output merged.log
+
+# Verbose mode
+python3 svlogger.py *.txt --output merged.log --verbose
+
+# Custom time pattern (Python regex)
+python3 svlogger.py logs/ --time-pattern '\\[([0-9]+\\.?[0-9]*)([a-zA-Z]+)\\]' --output merged.log
+```
+
+### Time Format and Custom Regex
+
+The script extracts simulation time using Python regular expressions. By default, it looks for the SVLogger format:
+```
+(@ 10.0ns) or (@42us)
+```
+
+The default regex pattern is: `r"\(@\s*([0-9]+\.?[0-9]*)([a-zA-Z]+)\)"`
+
+You can customize this with the `--time-pattern` option to match different log formats:
+
+```bash
+# For format [10.5ns]
+python3 svlogger.py logs/ --time-pattern '\\[([0-9]+\\.?[0-9]*)([a-zA-Z]+)\\]'
+
+# For format @10ns (no parentheses)
+python3 svlogger.py logs/ --time-pattern '@([0-9]+\.?[0-9]*)([a-zA-Z]+)'
+
+# For format time=10.2us
+python3 svlogger.py logs/ --time-pattern 'time=([0-9]+\.?[0-9]*)([a-zA-Z]+)'
+```
+
+**Note**: The pattern must contain two capture groups:
+1. First group: the numeric value (e.g., `10.5`)
+2. Second group: the time unit (e.g., `ns`, `us`)
+
+Supported time units: ns, us, ms, s, ps, fs (case insensitive)
+
+The script:
+- Extracts simulation time from each log line
+- Sorts all entries chronologically by converting times to nanoseconds
+- Preserves ANSI color codes
+- Requires only Python 3 standard library (no external dependencies)
+
 ## License
 
 This repo is licensed under MIT license. It grants nearly all rights to use,
