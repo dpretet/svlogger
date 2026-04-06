@@ -128,18 +128,17 @@ Icarus Verilog the first file is kept because the tool limitation to use `$syste
 
 ## Log Merger Tool
 
-SVLogger includes a Python script to merge multiple log files from different simulation runs
-into a single chronological file. This is useful when you have logs from multiple modules or
-testbenches and want to see the complete simulation timeline.
+SVLogger includes a Python script to merge multiple log files into a single chronological file. This
+is useful when you have logs from multiple modules logging and want to see the complete simulation timeline.
 
 ### Usage
 
 ```bash
-# Merge specific log files
-python3 svlogger.py file1.txt file2.txt --output merged.log
+# Merge specific log files into svlogger.log (default file name)
+python3 svlogger.py file1.txt file2.txt
 
 # Merge all .txt files in a directory
-python3 svlogger.py logs/*.txt --output merged.log
+python3 svlogger.py logs/*.txt --output simulation_run.log
 
 # Scan a directory recursively for all log files
 python3 svlogger.py logs/ --output merged.log
@@ -147,8 +146,6 @@ python3 svlogger.py logs/ --output merged.log
 # Verbose mode
 python3 svlogger.py *.txt --output merged.log --verbose
 
-# Custom time pattern (Python regex)
-python3 svlogger.py logs/ --time-pattern '\\[([0-9]+\\.?[0-9]*)([a-zA-Z]+)\\]' --output merged.log
 ```
 
 ### Time Format and Custom Regex
